@@ -5,7 +5,7 @@ var express         = require("express"),
     mongoose        = require('mongoose');
 
 // Connection to DB
-mongoose.connect('mongodb://daeperdomocr-olympus-6506740/tvshows', function(err, res) {
+mongoose.connect('mongodb://daeperdomocr-olympus-6506740/test', function(err, res) {
   if(err) throw err;
   console.log('Connected to Database');
 });
@@ -16,29 +16,30 @@ app.use(bodyParser.json());
 app.use(methodOverride());
 
 // Import Models and controllers
-var models     = require('./models/tvshow')(app, mongoose);
-var TVShowCtrl = require('./controllers/tvshows');
+var models     = require('./models/user')(app, mongoose);
+var UserCtrl = require('./controllers/users');
 
-// Example Route
+// Default Route
 var router = express.Router();
 router.get('/', function(req, res) {
-  res.send("Hello world!");
+  res.send("Olympus gym system management!");
 });
 app.use(router);
 
 // API routes
-var tvshows = express.Router();
+var users = express.Router();
 
-tvshows.route('/tvshows')
-  .get(TVShowCtrl.findAllTVShows)
-  .post(TVShowCtrl.addTVShow);
+users.route('/users')
+  .get(UserCtrl.findAllUsers)
+  .post(UserCtrl.addUser);
 
-tvshows.route('/tvshows/:id')
-  .get(TVShowCtrl.findById)
-  .put(TVShowCtrl.updateTVShow)
-  .delete(TVShowCtrl.deleteTVShow);
+users.route('/users/:id')
+  .get(UserCtrl.findById)
+  .put(UserCtrl.updateUser)
+  .delete(UserCtrl.deleteUser);
 
-app.use('/api', tvshows);
+//
+app.use('/api', users);
 
 // Start server
 app.listen(process.env.PORT);
